@@ -1,0 +1,161 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Member {
+    id Int @id @default(autoincrement())
+    name String @db.VarChar(10)
+    uId String @map("u_id") @db.VarChar(200)
+    pwd String @db.VarChar(15)
+    email String @unique(map:"email") @db.VarChar(50)
+    createAt DateTime @map("create_at") @default(now())
+    updateAt DateTime? @map("update_at")
+    status String? @db.VarChar(15)
+    inactiveDate DateTime? @map("inactive_date")
+    location String @db.VarChar(50)
+    point Int?
+    gender String? @db.VarChar(10)
+    birth DateTime @db.Date
+
+    myMission MyMission[]
+    favoriteFood FavoriteFood[]
+    reviewPhoto ReviewPhoto[]
+    review Review[]
+
+    @@map("member")
+}
+
+model FavoriteFood {
+    id Int @id @default(autoincrement())
+    memberId Int @map("member_id")
+    foodCateId Int @map("food_cate_id")
+
+    member Member @relation(fields: [memberId], references: [id])
+    foodCategory FoodCategory @relation(fields: [foodCateId], references:[id])
+
+    @@index([memberId],map:"member_id")
+    @@index([foodCateId], map:"food_cate_id")
+
+    @@map("favorite_food")
+}
+
+model FoodCategory {
+    id Int @id @default(autoincrement())
+    category String @db.VarChar(30)
+    createAt DateTime @map("create_at") @default(now())
+    updateAt DateTime? @map("update_at")
+
+    favoriteFood FavoriteFood[]
+
+    @@map("food_category")
+}
+
+model MyMission {
+    id Int @id @default(autoincrement())
+    missionId Int @map("mission_id")
+    memberId Int @map("member_id")
+    createAt DateTime @map("create_at") @default(now())
+    updateAt DateTime? @map("update_at")
+    status String? @db.VarChar(20)
+
+    mission Mission @relation(fields: [missionId], references: [id])
+    member Member @relation(fields: [memberId], references:[id])
+
+    @@index([missionId], map: "mission_id")
+    @@index([memberId], map:"member_id")
+
+    @@map("my_mission")
+}
+
+model Mission {
+    id Int @id @default(autoincrement())
+    detail String
+    createAt DateTime @map("create_at") @default(now())
+    updateAt DateTime? @map("update_at")
+    mpoint Int
+    storeId Int @map("store_id") // Store와의 관계를 위한 필드 추가
+    storeName String @map("store_name")
+    store Store @relation(fields: [storeId], references: [id])
+    myMission MyMission[]
+
+    @@index([storeId], map:"store_id")
+
+    @@map("mission")
+}
+
+model Store {
+    id Int @id @default(autoincrement())
+    name String @db.VarChar(20)
+    location String @db.VarChar(50)
+    category String @db.VarChar(20)
+    createAt DateTime @map("create_at") @default(now())
+    updateAt DateTime? @map("update_at")
+
+    missions Mission[] // Mission과의 1:N 관계 설정
+    reviewPhoto ReviewPhoto[]
+    review Review[]
+
+    @@map("store")
+}
+
+model Review {
+    id Int @id @default(autoincrement())
+    storeId Int @map("store_id")
+    memberId Int @map("member_id")
+    score String @db.VarChar(10)
+    context String?
+    createAt DateTime @map("create_at") @default(now())
+    updateAt DateTime? @map("update_at")
+
+    store Store @relation(fields:[storeId], references:[id])
+    member Member @relation(fields:[memberId], references:[id])
+
+    @@index([storeId], map:"store_id")
+    @@index([memberId], map:"member_id")
+
+    reviewPhoto ReviewPhoto[]
+
+    @@map("review")
+}
+
+model ReviewPhoto {
+    id Int @id @default(autoincrement())
+    reviewId Int @map("review_id")
+    storeId Int @map("store_id")
+    memberId Int @map("member_Id")
+    extname String @db.VarChar(10)
+    size Int
+    width Int
+    height Int
+    data Bytes // LongBlob 타입은 Bytes라 쓴다.
+
+    review Review @relation(fields:[reviewId], references: [id])
+    store Store @relation(fields:[storeId], references: [id])
+    member Member @relation(fields:[memberId], references: [id])
+
+    @@index([reviewId], map:"review_id")
+    @@index([storeId], map:"store_id")
+    @@index([memberId], map:"member_id")
+
+    @@map("review_photo")
+}
+
+model Session {
+    id String @id
+    sid String @unique
+    data String @db.VarChar(512)
+    expiresAt DateTime @map("expires_at")
+
+    @@map("session")
+}

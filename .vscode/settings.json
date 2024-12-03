@@ -1,0 +1,4 @@
+// 이 설정을하면 앞으로 VSCode에서 자동으로 import하는 모듈들은 .js확장자와 함께 import가 된다.
+{
+    "javascript.preferences.importModuleSpecifierEnding": "js"
+}
