@@ -61,8 +61,31 @@ app.use(
         },
     })
 );
-////////////////////////////////////
 
+
+app.get("/openapi.json", async (req,res,next)=>{
+    // #swagger.ignore = true
+    const options = {
+        openapi: "3.0.0",
+        disableLogs: true,
+        writeOutputFile: false,
+    };
+
+    const outputFile = "/dev/null";
+    const routes = ["./src/index.js"];
+    const doc = {
+        info:{
+            title: "UMC 7th",
+            description: "UMC 7th Node.js 테스트 프로젝트입니다.",
+        },
+        host: "localhost:3000",
+    };
+
+    const result = await swaggerAutogen(options)(outputFile, routes, doc);
+    res.json(result ? result.data : null);
+})
+
+////////////////////////////////////
 app.use(
     session({
         cookie: {
@@ -104,27 +127,7 @@ app.get(
     (req,res) => res.redirect("/")
 );
 
-app.get("/openapi.json", async (req,res,next)=>{
-    // #swagger.ignore = true
-    const options = {
-        openapi: "3.0.0",
-        disableLogs: true,
-        writeOutputFile: false,
-    };
 
-    const outputFile = "/dev/null";
-    const routes = ["./src/index.js"];
-    const doc = {
-        info:{
-            title: "UMC 7th",
-            description: "UMC 7th Node.js 테스트 프로젝트입니다.",
-        },
-        host: "ec2-15-165-95-120.ap-northeast-2.compute.amazonaws.com:3000",
-    };
-
-    const result = await swaggerAutogen(options)(outputFile, routes, doc);
-    res.json(result ? result.data : null);
-})
 
 
 
