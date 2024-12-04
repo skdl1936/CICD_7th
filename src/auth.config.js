@@ -8,7 +8,7 @@ export const googleStrategy = new GoogleStrategy(
     {
         clientID: process.env.PASSPORT_GOOGLE_CLIENT_ID,
         clientSecret: process.env.PASSPORT_GOOGLE_CLIENT_SECRET,
-        callbackURL: "http://localhost:3000/oauth2/callback/google",
+        callbackURL: "http://http://15.165.95.120:3000//oauth2/callback/google",
         scope: ["email", "profile"],
         state: true,
     },
@@ -56,7 +56,7 @@ export const naverStrategy = new NaverStrategy(
     {
         clientID: process.env.PASSPORT_NAVER_CLIENT_ID,
         clientSecret: process.env.PASSPORT_NAVER_CLIENT_SECRET,
-        callbackURL: "http://localhost:3000/oauth/naver/callback",
+        callbackURL: "http://15.165.95.120:3000//oauth/naver/callback",
         scope: ["email", "profile"],
         state: true,
     },
