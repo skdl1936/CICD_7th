@@ -108,9 +108,9 @@ app.use(passport.session());
 //구글로 로그인하기 라우터
 app.get("/oauth2/login/google", passport.authenticate("google"));
 app.get(
-    "/oauth2/callback/google",
+    "https://ec2-15-165-95-120.ap-northeast-2.compute.amazonaws.com:3000/oauth2/callback/google",
     passport.authenticate("google", {
-        failureRedirect: "/oauth2/login/google",
+        failureRedirect: "https://ec2-15-165-95-120.ap-northeast-2.compute.amazonaws.com:3000/oauth2/login/google",
         failureMessage: true,
     }),
     (req, res) => res.redirect("/")
@@ -119,9 +119,9 @@ app.get(
 // 네이버로 로그인하기 라우터
 app.get('/oauth2/login/naver', passport.authenticate("naver"));
 app.get(
-    '/oauth/naver/callback',
+    'https://ec2-15-165-95-120.ap-northeast-2.compute.amazonaws.com:3000/oauth/naver/callback',
     passport.authenticate('naver',{
-        failureRedirect: "/oauth/login/callback",
+        failureRedirect: "https://ec2-15-165-95-120.ap-northeast-2.compute.amazonaws.com:3000/oauth/login/callback",
         failureMessage: true,
     }),
     (req,res) => res.redirect("/")
