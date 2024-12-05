@@ -27,6 +27,7 @@ model Member {
     point Int?
     gender String? @db.VarChar(10)
     birth DateTime @db.Date
+    test Int?
 
     myMission MyMission[]
     favoriteFood FavoriteFood[]
