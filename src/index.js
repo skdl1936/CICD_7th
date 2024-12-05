@@ -110,7 +110,7 @@ app.get("/oauth2/login/google", passport.authenticate("google"));
 app.get(
     "/oauth2/callback/google",
     passport.authenticate("google", {
-        failureRedirect: "http://ec2-15-165-95-120.ap-northeast-2.compute.amazonaws.com:3000/oauth2/login/google",
+        failureRedirect: "/oauth2/login/google",
         failureMessage: true,
     }),
     (req, res) => res.redirect("/")
@@ -121,7 +121,7 @@ app.get('/oauth2/login/naver', passport.authenticate("naver"));
 app.get(
     '/oauth/naver/callback',
     passport.authenticate('naver',{
-        failureRedirect: "http://ec2-15-165-95-120.ap-northeast-2.compute.amazonaws.com:3000/oauth/login/callback",
+        failureRedirect: "/oauth/login/callback",
         failureMessage: true,
     }),
     (req,res) => res.redirect("/")
